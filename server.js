@@ -21,25 +21,31 @@ const db = mysql.createConnection(
 app.get("/", (req, res) => {
     res.send("A szerver működik!")
 })
+ 
 app.get("/v", (req, res) => {
-    const sql = "SELECT * FROM versenyzok";
+    const sql = "SELECT * FROM `versenyzok`";
     db.query(sql, (err, result) => {
         if (err) return res.json(err);
         return res.json(result);
-    }
-    )
-}
-)
-app.get("/v6/:id",(req, res) => {
-    const sql = "SELECT * FROM `versenyzok` WHERE ID= 6";
+    })
+})
+ 
+app.get("/v6", (req, res) => {
+    const sql = "SELECT * FROM `versenyzok` WHERE ID=6;";
     db.query(sql, (err, result) => {
         if (err) return res.json(err);
         return res.json(result);
-    }
-    )
-}
-)
-
+    })
+})
+ 
+app.post("/vuj", (req,res) =>{
+    const sql = "INSERT INTO `versenyzok`(`ID`,`versenyzo`) VALUES (?,?)";
+    const values =[req.body.ID, req.body.versenyzo];
+    db.query(sql, (err, result) => {
+        if (err) return res.status(500).json({error: "Hibás adatbázis művelet!"});
+        return res.json(result);
+    })
+})
  
 app.listen(3000, () => {
     console.log('A szerver a 3000-es porton fut!')
